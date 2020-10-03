@@ -1,4 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[9weeks Tech Blog]]></title><description><![CDATA[A starter blog demonstrating what Gatsby can do.]]></description><link>https://gatsby-starter-blog-demo.netlify.app</link><generator>GatsbyJS</generator><lastBuildDate>Thu, 24 Sep 2020 03:57:36 GMT</lastBuildDate><item><title><![CDATA[Hello World]]></title><description><![CDATA[Mainly, we are talking about how we build and service without risk and problems. This is my first post on my new fake blog! How exciting! I…]]></description><link>https://gatsby-starter-blog-demo.netlify.app/hello-world/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.app/hello-world/</guid><pubDate>Thu, 24 Sep 2020 22:12:03 GMT</pubDate><content:encoded>&lt;p&gt;Mainly, we are talking about how we build and service without risk and problems.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[9weeks Tech Blog]]></title><description><![CDATA[A starter blog demonstrating what Gatsby can do.]]></description><link>https://gatsby-starter-blog-demo.netlify.app</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 03 Oct 2020 02:32:26 GMT</lastBuildDate><item><title><![CDATA[react native - SafeAreaView cookbook]]></title><description><![CDATA[오늘은 SafeAreaView를 조금 더 잘 활용하는 방법에 대해서 공유하고자 한다. 해결사 SafeAreaView Notch(노치)는 iOS, Android에 상관없는 특징으로 이로 인해 layout…]]></description><link>https://gatsby-starter-blog-demo.netlify.app/rn-screen/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.app/rn-screen/</guid><pubDate>Sat, 03 Oct 2020 11:09:03 GMT</pubDate><content:encoded>&lt;p&gt;오늘은 SafeAreaView를 조금 더 잘 활용하는 방법에 대해서 공유하고자 한다.&lt;/p&gt;
+&lt;h2&gt;해결사 SafeAreaView&lt;/h2&gt;
+&lt;p&gt;Notch(노치)는 iOS, Android에 상관없는 특징으로 이로 인해 layout이 각각 다르게 보이는 문제가 있다. 이는 SafeAreaView가 제공되기 전에는 다소 귀찮게 해결해야 했으나, 지금은 아주 쉽게 해결할 수 있게 되었다.&lt;/p&gt;
+&lt;h5&gt;과거에는…&lt;/h5&gt;
+&lt;p&gt;2017년에 iPhone X가 나오면서, Notch(노치) 디자인으로 인한, 전체 height를 구하기는게 약간 까다로워한졌다. 또한, Home bar로 인한 사용할 수 없는 하단 영역도 생기게 되었다. 초기에는 이를 해결하기 위한 &lt;strong&gt;react-native-phone-x-helper&lt;/strong&gt; 와 같은 도구를 사용했으나, RN(react-native)의 Platform을 이용한 간단한 library에 지나지 않았다.&lt;/p&gt;
+&lt;h5&gt;현재는…&lt;/h5&gt;
+&lt;p&gt;SafeAreaView를 공식적으로 제공하므로, SafrAreaView만 사용한다면 사실 전혀 문제가 없다. 어떤 기기든지(물론 미래의 기기는 아무도 모른다) SafeAreaView안에만 제공하면 크게 화면을 벗어나는 문제는 없다.
+모든 화면이 SafeAreaView일 필요는 없으므로, 최상단 화면만 여기에 감싸면 된다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;app.tsx&quot;&gt;&lt;pre class=&quot;language-app.tsx&quot;&gt;&lt;code class=&quot;language-app.tsx&quot;&gt;const App = () =&amp;gt; (
+    &amp;lt;SafeAreaView style={{flex: 1}}&amp;gt;
+        &amp;lt;MyCustomRoute /&amp;gt;
+    &amp;lt;/SafeAreaView&amp;gt;
+)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이렇게 작성하면 모든 Routing을 통해 보여지는 페이지는 SafeArea 안에서 작동하게 된다.&lt;/p&gt;
+&lt;p&gt;다만, 몇 가지 문제가 있는데…&lt;/p&gt;
+&lt;h3&gt;Home bar’s Background&lt;/h3&gt;
+&lt;p&gt;iOS에서 위의 앱을 살펴보면, Home bar 주변에는 아무 영향을 미치지 못함을 알 수 있다. 이 자체로는 크게 문제가 되지 않는다. 하지만, Slide up animation을 구현하는 경우 화면 아래에서 transition이 일어나게 되면 Home bar의 배경 화면에 그대로 노출된다는 점이다. 이러한 경우를 위해서, SafeAreaView가 이후의 영역에 대한 정보도 같이 주어야 한다.&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;const App = () =&amp;gt; (
+    &amp;lt;&amp;gt;
+        &amp;lt;SafeAreaView style={{flex: 1}}&amp;gt;
+            &amp;lt;MyCustomRoute /&amp;gt;
+        &amp;lt;/SafeAreaView&amp;gt;
+        &amp;lt;SafeAreaView style={{flex: 0, backgroundColor: &amp;#39;white&amp;#39;}}&amp;gt;
+        &amp;lt;/SafeAreaView&amp;gt;
+    &amp;lt;/&amp;gt;
+)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;그렇다. &lt;code class=&quot;language-text&quot;&gt;flex: 0&lt;/code&gt;이라는 점이다. 무척 의미없어 보이는 구문이지만, 이로 인해 Home bar의 배경 화면이 transparent(투명)이 아닌 흰색이 되며, transition animation에서 군더더기 없는 모습을 보일 수 있다.
+여담이지만, &lt;code class=&quot;language-text&quot;&gt;&amp;lt;SafeAreaView&amp;gt;&lt;/code&gt;가 2개가 되어 단일 JSX 반환이 안되므로 &lt;code class=&quot;language-text&quot;&gt;&amp;lt;&amp;gt;&lt;/code&gt;으로 감싸 Fragment 처리하였다.&lt;/p&gt;
+&lt;h3&gt;Status bar&lt;/h3&gt;
+&lt;p&gt;Notch로 인한 Status bar를 관리하기 위해서는 RN의 StatusBar를 이용하면 된다. 여기에 같이 언급하는 이유는 다음 섹션 때문이다.&lt;/p&gt;
+&lt;h3&gt;Custom SafeAreaView&lt;/h3&gt;
+&lt;p&gt;예제는 단순하게 표현하기 위해서 Routing을 감싸는 형태로 작성했지만, 현실은 전혀 그렇지가 않다. 개별 Screen에서 Safe하게 그려져야 할지 혹은 전체 화면 형태로 그려져야 할지 선택하는 편이 오히려 더 효율적이다. 따라서, SafeAreaView를 customization한 Component로 관리하는 것이 적합하다.&lt;/p&gt;
+&lt;p&gt;간략히 표현해 보자면, &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;const Content = ({chidren}) =&amp;gt; {
+    const { color: {backgroundColor}, isNightMode } = useContext(Theme);
+    const barStyle = isNightMode ? &amp;#39;dark-content&amp;#39; : &amp;#39;light-content&amp;#39;;
+    return (
+        &amp;lt;&amp;gt;
+            &amp;lt;StatusBar barStyle={barStyle}&amp;gt;
+            &amp;lt;SafeAreaView style={{flex: 1, backgroundColor}}&amp;gt;
+                {children}
+            &amp;lt;/SafeAreaView&amp;gt;
+            &amp;lt;SafeAreaView style={{flex: 0, backgroundColor}}&amp;gt;
+            &amp;lt;/SafeAreaView&amp;gt;
+        &amp;lt;/&amp;gt;
+    )
+};&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;이러한 형태로 Content라는 Component로 처리하는 것이 App의 관리 차원에서 더욱 효율적이다. &lt;/p&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;RN의 이미 엄청난 편의를 제공한다. SafeAreaView는 필수적이며, 기존의 View에서 SafeAreaView로 이름만 바꾸면 의미 없는 코드들을 쉽게 제거할 수 있다.&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Hello World]]></title><description><![CDATA[Mainly, we are talking about how we build and service without risk and problems. This is my first post on my new fake blog! How exciting! I…]]></description><link>https://gatsby-starter-blog-demo.netlify.app/hello-world/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.app/hello-world/</guid><pubDate>Thu, 24 Sep 2020 22:12:03 GMT</pubDate><content:encoded>&lt;p&gt;Mainly, we are talking about how we build and service without risk and problems.&lt;/p&gt;
 &lt;p&gt;This is my first post on my new fake blog! How exciting!&lt;/p&gt;
 &lt;p&gt;I’m sure I’ll write a lot more interesting things in the future.&lt;/p&gt;
 &lt;p&gt;Oh, and here’s a great quote from this Wikipedia on
